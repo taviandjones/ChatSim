@@ -11,7 +11,7 @@ import a_chatbot_agent_simulation as ca_sim
 a_csv_manager.empty_raw_data_csv()
 a_csv_manager.empty_trial_results_csv()
 
-for i in range(60, 125):
+for i in range(110, 115):
     ca_sim.g.num_agents = i
     wait = mh.run_replication()
     mh.print_output(ca_sim.g.num_agents, wait)

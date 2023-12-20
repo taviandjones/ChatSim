@@ -9,7 +9,7 @@ import time
 
 
 class g:
-    desired_customers = 50000
+    desired_customers = 100000
 
     arrival_rate = 6
     num_agents = 100
