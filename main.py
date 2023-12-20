@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings('ignore', category=FutureWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
 import matplotlib.pyplot as plt
 import csv_manager
 import main_helper as mh

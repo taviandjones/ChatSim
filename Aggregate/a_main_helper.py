@@ -1,5 +1,5 @@
 import numpy as np
-import chatbot_agent_simulation as ca_sim
+import a_chatbot_agent_simulation as ca_sim
 
 def run_replication():
     help_center_model = ca_sim.Help_Center()
@@ -8,7 +8,7 @@ def run_replication():
     df_replication = help_center_model.run()
     
     rep_mean = np.nanmean(df_replication['Q_Agent_Time'].tail(int(len(df_replication) * 0.9)))
-    print ('Mean Q Agent Time: {}'.format(rep_mean))
+    
     return rep_mean
 
 def find_agent_num(desired_wait):
@@ -29,5 +29,5 @@ def find_agent_num(desired_wait):
 
     return ca_sim.g.num_agents
 
-def print_output(desired_wait, num_agents):
-    print('With an arrival rate of {}, a wait time of {} can be achieved with ~{} agents.'.format(ca_sim.g.arrival_rate, desired_wait, num_agents))
+def print_output(num_agents, wait):
+    print('{}: {}'.format(num_agents, wait))

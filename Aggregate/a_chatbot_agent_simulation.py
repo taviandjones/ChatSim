@@ -9,7 +9,7 @@ import time
 
 
 class g:
-    desired_customers = 20000
+    desired_customers = 50000
 
     arrival_rate = 6
     num_agents = 100
@@ -54,37 +54,39 @@ class Help_Center:
     def generate_customer_arrivals(self):
         anim_interval = g.desired_customers // 100
         while self.customer_counter < g.desired_customers:
+            ############################################
             # Forloop makes sure there are 100 intervals, doesn't affect the number of customers
-            for _ in range(anim_interval):
-                cus = Customer(self.customer_counter) 
-                try:
-                    # This returns the probability of agent in a few steps
-                    # First, it looks through the dataframe of the time arrays.
-                    #   Remember that each array is a list of times, and the index
-                    #   of that array is how many people were in front of that 
-                    #   person in line. Hence the iloc[].
-                    # Second, it takes the average of that array. 
-                    #   This is the average wait time of people who had the same 
-                    #   number of people  in front
-                    # Third, it runs the return_prob_agent function on that number
-                    #   to turn that displayed wait time into the probability
-                    historical_wait_time = np.array(self.df_time_arrays.iloc[len(self.agent.queue), 0]).mean()
-                    prob_agent = self.return_prob_agent(historical_wait_time)
-                except:
-                    estimated_wait_time = (len(self.agent.queue) * g.t_agent) / g.num_agents + (g.t_agent / 2)
-                    prob_agent = self.return_prob_agent(estimated_wait_time)
-                
-                if random.random() <= prob_agent: 
-                    cus.first_path = 'Agent'
-                    self.env.process(self.enter_agent_center(cus))
-                else:
-                    cus.first_path = 'Bot'
-                    self.env.process(self.enter_chatbot_center(cus))
-                self.customer_counter += 1
-                yield self.env.timeout(random.expovariate(g.arrival_rate))
+            #for _ in range(anim_interval):
+            ############################################
+            cus = Customer(self.customer_counter) 
+            try:
+                # This returns the probability of agent in a few steps
+                # First, it looks through the dataframe of the time arrays.
+                #   Remember that each array is a list of times, and the index
+                #   of that array is how many people were in front of that 
+                #   person in line. Hence the iloc[].
+                # Second, it takes the average of that array. 
+                #   This is the average wait time of people who had the same 
+                #   number of people  in front
+                # Third, it runs the return_prob_agent function on that number
+                #   to turn that displayed wait time into the probability
+                historical_wait_time = np.array(self.df_time_arrays.iloc[len(self.agent.queue), 0]).mean()
+                prob_agent = self.return_prob_agent(historical_wait_time)
+            except:
+                estimated_wait_time = (len(self.agent.queue) * g.t_agent) / g.num_agents + (g.t_agent / 2)
+                prob_agent = self.return_prob_agent(estimated_wait_time)
             
-            self.animation()
-            
+            if random.random() <= prob_agent: 
+                cus.first_path = 'Agent'
+                self.env.process(self.enter_agent_center(cus))
+            else:
+                cus.first_path = 'Bot'
+                self.env.process(self.enter_chatbot_center(cus))
+            self.customer_counter += 1
+            yield self.env.timeout(random.expovariate(g.arrival_rate))
+            ############################################
+            #self.animation()
+            ############################################
 
     def enter_chatbot_center(self, customer):
         # Wait time for chatbot is always the same
