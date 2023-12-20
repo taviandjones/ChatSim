@@ -9,7 +9,7 @@ import time
 
 
 class g:
-    desired_customers = 20000
+    desired_customers = 30000
 
     arrival_rate = 6
     num_agents = 100
@@ -195,6 +195,6 @@ class Help_Center:
         self.env.run()
         #plt.savefig('my_plot.png', dpi=300)
         self.write_trial_results()
-        #self.write_raw_data()
+        self.write_raw_data()
 
         return self.df_individual_run
