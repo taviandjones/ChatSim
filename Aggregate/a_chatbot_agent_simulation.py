@@ -52,12 +52,7 @@ class Help_Center:
         self.df_time_arrays = pd.DataFrame(columns=['Time_Array'])
 
     def generate_customer_arrivals(self):
-        anim_interval = g.desired_customers // 100
         while self.customer_counter < g.desired_customers:
-            ############################################
-            # Forloop makes sure there are 100 intervals, doesn't affect the number of customers
-            #for _ in range(anim_interval):
-            ############################################
             cus = Customer(self.customer_counter) 
             try:
                 # This returns the probability of agent in a few steps
@@ -84,9 +79,6 @@ class Help_Center:
                 self.env.process(self.enter_chatbot_center(cus))
             self.customer_counter += 1
             yield self.env.timeout(random.expovariate(g.arrival_rate))
-            ############################################
-            #self.animation()
-            ############################################
 
     def enter_chatbot_center(self, customer):
         # Wait time for chatbot is always the same
