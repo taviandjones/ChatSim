@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import csv_manager
 import main_helper as mh
 
+print("Hello World")
 # Initialize the plot
 # This is one of many ways to do this, I have chosen to use 
 # a specific functionality of matplotlib, but you do not 

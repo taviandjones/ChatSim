@@ -3,12 +3,12 @@ import chatbot_agent_simulation as ca_sim
 
 def run_replication():
     help_center_model = ca_sim.Help_Center()
-    # Returns the whole dataframe for analysis
+    # That just returned the whole dataframe for analysis
     #   We are just looking at the mean this time. 
     df_replication = help_center_model.run()
     
     rep_mean = np.nanmean(df_replication['Q_Agent_Time'].tail(int(len(df_replication) * 0.9)))
-    print ('Mean Q Agent Time: {}'.format(rep_mean))
+    print ('{} Agents: {}'.format(ca_sim.g.num_agents, rep_mean))
     return rep_mean
 
 def find_agent_num(desired_wait):

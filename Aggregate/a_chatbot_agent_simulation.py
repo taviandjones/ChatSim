@@ -9,7 +9,7 @@ import time
 
 
 class g:
-    desired_customers = 100000
+    desired_customers = 10000
 
     arrival_rate = 6
     num_agents = 100
@@ -135,11 +135,6 @@ class Help_Center:
                                   'Mean_Q': [mean_q_agent_time]})
         existing_data = pd.concat([existing_data, df_to_add], ignore_index=True)
         existing_data.to_csv('trial_results.csv', index=False)
-    
-    def write_raw_data(self):
-        raw_data = pd.read_csv('raw_data.csv')
-        raw_data = pd.concat([raw_data, self.df_individual_run], ignore_index=True)
-        raw_data.to_csv('raw_data.csv', index=False)
 
     def return_prob_agent(self, live_displayed_wait):
         # Uses the displayed wait time in the probability calculation to return a number from 0-1
@@ -147,48 +142,9 @@ class Help_Center:
         utility_b = -g.c_bot * g.t_bot - (1-g.p_success) * g.beta * (g.c_line * live_displayed_wait + g.c_agent * g.t_agent)
         return math.e ** utility_a / (math.e ** utility_a + math.e ** utility_b)
 
-    def animation(self):
-        Display.ax[0, 0].clear()
-        Display.ax[0, 1].clear()
-        Display.ax[1, 0].clear()
-        Display.ax[1, 1].clear()
-        self.df_individual_run['Q_Agent_Time'] = pd.to_numeric(self.df_individual_run['Q_Agent_Time'], errors='coerce')
-
-        # Empirical queue estimate
-        a_y0 = []
-        for i in range(len(self.df_time_arrays)):
-            a_y0.append(np.array(self.df_time_arrays.iloc[i, 0]).mean())
-        a_x0 = np.arange(len(a_y0))
-        Display.ax[0, 0].plot(a_x0, a_y0, 'b', linewidth=1)
-        Display.ax[0, 0].set_title('Empirical Displayed')
-        Display.ax[0, 0].set_xlabel('Queue Length')
-        Display.ax[0, 0].set_ylabel('Average Wait')
-
-        # Queue length
-        q_times = np.array(self.df_individual_run['Q_Agent_Time'])
-        q_times = q_times[~np.isnan(q_times)]  # Remove NaN values
-        Display.ax[0, 1].hist(q_times, bins=100)
-
-        # Queue evolution
-        a_x2 = [x * (g.desired_customers // 200) for x in range(200)]
-        df_splits = np.array_split(self.df_individual_run.tail(int(len(self.df_individual_run) * 0.9)), 200)
-        a_y2 = []
-        for s in range(200):
-            a_y2.append(df_splits[s]['Q_Agent_Time'].mean())
-        Display.ax[1, 0].plot(np.array(a_x2), np.array(a_y2), color='red')
-
-
-        #queue_length_array = np.array(self.df_individual_run['Queue_Length'])
-        #Display.ax[1, 1].hist(queue_length_array, bins=len(set(queue_length_array)))
-
-        plt.pause(0.001)
-
-
     def run(self):
         self.env.process(self.generate_customer_arrivals())
         self.env.run()
-        #plt.savefig('my_plot.png', dpi=300)
         self.write_trial_results()
-        #self.write_raw_data()
 
         return self.df_individual_run

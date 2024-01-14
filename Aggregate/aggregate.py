@@ -4,11 +4,11 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 import matplotlib.pyplot as plt
 import pandas as pd
+
 import a_csv_manager as a_csv_manager
 import a_main_helper as mh
 import a_chatbot_agent_simulation as ca_sim
 
-a_csv_manager.empty_raw_data_csv()
 a_csv_manager.empty_trial_results_csv()
 
 for i in range(110, 115):
